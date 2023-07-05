@@ -1,42 +1,55 @@
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import {
+	StyleSheet,
+	Text,
+	View,
+	ScrollView,
+	FlatList,
+	TouchableOpacity,
+} from "react-native";
 
 export default function App() {
-	const [name, setName] = useState("Nicolas");
-	const [age, setAge] = useState(0);
+	const [people, setPeople] = useState([
+		{ name: "shaun", id: "1" },
+		{ name: "yoshi", id: "2" },
+		{ name: "mario", id: "3" },
+		{ name: "luigi", id: "4" },
+		{ name: "peach", id: "5" },
+		{ name: "toad", id: "6" },
+		{ name: "titan", id: "7" },
+		{ name: "titans", id: "8" },
+		{ name: "phil", id: "9" },
+	]);
 
-	const handleName = (e) => {
-		setName(e);
+	const pressHandler = (id) => {
+		console.log(id);
+		setPeople((prev) => {
+			return prev.filter((item) => item.id != id);
+		});
 	};
-	const handleAge = (e) => {
-		setAge(e);
-	};
+
 	return (
 		<View style={styles.container}>
-			<View style={styles.header}>
-				<Text style={styles.boldText}>
-					Hello {name} is {age} years{" "}
-				</Text>
-			</View>
-			<Text>Enter name</Text>
-			<TextInput
-				multiline
-				style={styles.input}
-				placeholder="Enter Name"
-				onChangeText={handleName}
-			/>
-			<Text>Enter Age</Text>
-			<TextInput
-				keyboardType="numeric"
-				style={styles.input}
-				placeholder="Enter Age"
-				onChangeText={handleAge}
+			<FlatList
+				numColumns={3}
+				keyExtractor={(item) => item.id}
+				data={people}
+				renderItem={({ item }) => (
+					<TouchableOpacity onPress={() => pressHandler(item.id)}>
+						<Text style={styles.item}>{item.name}</Text>
+					</TouchableOpacity>
+				)}
 			/>
 
-			<View style={styles.buttonContainer}>
-				<Button title="Update State" />
-			</View>
+			{/* <ScrollView>
+				{people.map((people) => (
+					<View key={people.id}>
+						<Text style={styles.item}>{people.name}</Text>
+					</View>
+				))}
+			</ScrollView> */}
+
 			<StatusBar style="auto" />
 		</View>
 	);
@@ -46,25 +59,17 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
+		paddingTop: 40,
+		paddingHorizontal: 20,
+		// alignItems: "center",
+		// justifyContent: "center",
 	},
-	header: {
+	item: {
+		marginTop: 24,
+		padding: 30,
 		backgroundColor: "red",
-		padding: 20,
-	},
-	boldText: {
-		fontWeight: "bold",
+		fontSize: 20,
 		color: "white",
-	},
-	buttonContainer: {
-		marginTop: 20,
-	},
-	input: {
-		borderWidth: 1,
-		borderColor: "#777",
-		margin: 10,
-		padding: 10,
-		width: 200,
+		marginHorizontal: 10,
 	},
 });
